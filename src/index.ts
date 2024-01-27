@@ -18,7 +18,7 @@ async function run(): Promise<void> {
   core.info(`new version: ${newVersionString}`)
 
   core.info('writing new version to pubspec.yaml')
-  writeUpdatedVersion(pubspecContent, newVersionString)
+  writeUpdatedVersion(newVersionString)
 }
 
 run()

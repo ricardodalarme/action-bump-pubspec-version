@@ -18,15 +18,13 @@ export function readPubspec(): PubspecContent {
   }
 }
 
-export function writeUpdatedVersion(
-  pubspecContent: PubspecContent,
-  newVersion: string
-): void {
-  const updatedPubspecContent = {
-    ...pubspecContent,
-    version: newVersion
-  }
-  const updatedYaml = yaml.stringify(updatedPubspecContent)
+export function writeUpdatedVersion(newVersion: string): void {
+  const originalYaml = fs.readFileSync(pubspecPath, 'utf-8')
+  const originalDocument = yaml.parseDocument(originalYaml)
+
+  originalDocument.set('version', newVersion)
+
+  const updatedYaml = originalDocument.toString()
 
   fs.writeFileSync(pubspecPath, updatedYaml, 'utf-8')
 }
