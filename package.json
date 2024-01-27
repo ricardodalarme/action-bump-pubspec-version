@@ -1,0 +1,49 @@
+{
+  "name": "bump-pubspec-version",
+  "version": "0.1.0",
+  "description": "GitHub Action to bump the version of a pubspec file",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write '**/*.ts'",
+    "format-check": "prettier --check '**/*.ts'",
+    "lint": "eslint src/**/*.ts",
+    "package": "ncc build --source-map --license licenses.txt",
+    "all": "npm run build && npm run format && npm run lint && npm run package"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ricardodalarme/bump-pubspec-version.git"
+  },
+  "keywords": [
+    "actions",
+    "github",
+    "pub",
+    "pubspec",
+    "flutter",
+    "dart",
+    "version"
+  ],
+  "author": "Ricardo Dalarme",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ricardodalarme/bump-pubspec-version/issues"
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0",
+    "properties-reader": "^2.3.0",
+    "yaml": "^2.3.4"
+  },
+  "homepage": "https://github.com/ricardodalarme/bump-pubspec-version#readme",
+  "devDependencies": {
+    "@types/node": "20",
+    "@types/properties-reader": "^2.1.3",
+    "@typescript-eslint/parser": "^6.19.1",
+    "@vercel/ncc": "^0.38.1",
+    "eslint": "^8.56.0",
+    "eslint-plugin-github": "^4.10.1",
+    "prettier": "^3.2.4",
+    "typescript": "5.3.3"
+  }
+}
