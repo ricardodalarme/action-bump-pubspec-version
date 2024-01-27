@@ -19,12 +19,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
         - uses: actions/checkout@v3
         - uses: ricardodalarme/bump-pubspec-version@main
-            with:
+          with:
             mode: "major" # major, minor, patch
-            github_token: ${{ secrets.GITHUB_TOKEN }}
+        - uses: EndBug/add-and-commit@v9
 ```
 
 This **order** is important!
@@ -35,4 +36,3 @@ This **order** is important!
 ```
 
 > If the repository is not checked out first, the script cannot find the properties file.
-> The token needs to have permissions to push to the repository.

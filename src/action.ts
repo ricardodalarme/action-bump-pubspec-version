@@ -3,7 +3,6 @@ import {BumpMode, parseVersionMode} from './update-version'
 
 type Input = {
   mode: BumpMode
-  githubToken: string
 }
 
 type Output = {
@@ -12,8 +11,7 @@ type Output = {
 
 export function getInputs(): Input {
   return {
-    mode: parseVersionMode(core.getInput('mode', {required: true})),
-    githubToken: core.getInput('github_token', {required: true})
+    mode: parseVersionMode(core.getInput('mode', {required: true}))
   }
 }
 

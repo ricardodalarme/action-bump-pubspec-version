@@ -1,19 +1,16 @@
-name: "Bump the version of a pubspec file"
-description: "Bump the version of a pubspec file and create a commit with the changes"
-author: "Ricardo Dalarme"
+name: 'Bump the version of a pubspec file'
+description: 'Bump the version of a pubspec file and create a commit with the changes'
+author: 'Ricardo Dalarme'
 
 inputs:
   mode:
-    description: "major|minor|patch"
-    required: true
-  github_token:
-    description: "The GITHUB_TOKEN secret"
+    description: 'major|minor|patch'
     required: true
 
 outputs:
   new_version:
-    description: "The bumped version"
+    description: 'The bumped version'
 
 runs:
-  using: "node20"
-  main: "dist/index.js"
+  using: 'node20'
+  main: 'dist/index.js'
