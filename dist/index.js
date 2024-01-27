@@ -101,7 +101,9 @@ function run() {
         const newVersionString = newVersion.toString();
         core.info(`new version: ${newVersionString}`);
         core.info('writing new version to pubspec.yaml');
-        (0, pubspec_1.writeUpdatedVersion)(pubspecContent, newVersionString);
+        (0, pubspec_1.writeUpdatedVersion)(newVersionString);
+        core.info('setting outputs');
+        core.setOutput('new_version', newVersionString);
     });
 }
 run()
@@ -155,9 +157,11 @@ function readPubspec() {
     }
 }
 exports.readPubspec = readPubspec;
-function writeUpdatedVersion(pubspecContent, newVersion) {
-    const updatedPubspecContent = Object.assign(Object.assign({}, pubspecContent), { version: newVersion });
-    const updatedYaml = yaml.stringify(updatedPubspecContent);
+function writeUpdatedVersion(newVersion) {
+    const originalYaml = fs.readFileSync(pubspecPath, 'utf-8');
+    const originalDocument = yaml.parseDocument(originalYaml);
+    originalDocument.set('version', newVersion);
+    const updatedYaml = originalDocument.toString();
     fs.writeFileSync(pubspecPath, updatedYaml, 'utf-8');
 }
 exports.writeUpdatedVersion = writeUpdatedVersion;
