@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import {readPubspec} from './pubspec'
+import {readPubspec, writeUpdatedVersion} from './pubspec'
 import {context} from '@actions/github'
 import {getInputs} from './action'
 import {updateFiles} from './git'
@@ -11,18 +11,20 @@ async function run(): Promise<void> {
   const pubspecContent = readPubspec()
   const currentVersion = pubspecContent.version
 
+  core.info(`current version: ${currentVersion}`)
+
   const newVersion = new Version(currentVersion)
   newVersion.bump(mode)
 
-  const {owner, repo} = context.repo
+  const newVersionString = newVersion.toString()
+  core.info(`new version: ${newVersionString}`)
 
-  await updateFiles(
-    newVersion.toString(),
-    githubToken,
-    owner,
-    repo,
-    context.sha
-  )
+  core.info('writing new version to pubspec.yaml')
+  writeUpdatedVersion(pubspecContent, newVersionString)
+
+  core.info('committing and pushing changes')
+  const {owner, repo} = context.repo
+  await updateFiles(newVersionString, githubToken, owner, repo, context.sha)
 }
 
 run()

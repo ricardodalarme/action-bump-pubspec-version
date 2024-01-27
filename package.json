@@ -1,6 +1,5 @@
 {
   "name": "bump-pubspec-version",
-  "version": "0.1.0",
   "description": "GitHub Action to bump the version of a pubspec file",
   "main": "lib/index.js",
   "scripts": {
