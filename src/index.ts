@@ -1,17 +1,17 @@
 import * as core from '@actions/core'
 import {readPubspec, writeUpdatedVersion} from './pubspec'
 import {getInputs} from './action'
-import {Version} from './update-version'
+import {Version} from './version'
 
 async function run(): Promise<void> {
-  const {mode} = getInputs()
+  const {mode, considerCode} = getInputs()
 
   const pubspecContent = readPubspec()
   const currentVersion = pubspecContent.version
 
   core.info(`current version: ${currentVersion}`)
 
-  const newVersion = new Version(currentVersion)
+  const newVersion = new Version(currentVersion, considerCode)
   newVersion.bump(mode)
 
   const newVersionString = newVersion.toString()

@@ -25,6 +25,7 @@ jobs:
         - uses: ricardodalarme/bump-pubspec-version@main
           with:
             mode: "major" # major, minor, patch
+            consider_code: true
         - uses: EndBug/add-and-commit@v9
 ```
 

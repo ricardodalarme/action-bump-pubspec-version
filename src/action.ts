@@ -1,8 +1,9 @@
 import * as core from '@actions/core'
-import {BumpMode, parseVersionMode} from './update-version'
+import {BumpMode, parseBumpMode} from './version'
 
 type Input = {
   mode: BumpMode
+  considerCode: boolean
 }
 
 type Output = {
@@ -11,7 +12,8 @@ type Output = {
 
 export function getInputs(): Input {
   return {
-    mode: parseVersionMode(core.getInput('mode', {required: true}))
+    mode: parseBumpMode(core.getInput('mode', {required: true})),
+    considerCode: core.getBooleanInput('consider_code', {required: true})
   }
 }
 

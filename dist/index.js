@@ -32,10 +32,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.setOutputs = exports.getInputs = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const update_version_1 = __nccwpck_require__(5140);
+const version_1 = __nccwpck_require__(8217);
 function getInputs() {
     return {
-        mode: (0, update_version_1.parseVersionMode)(core.getInput('mode', { required: true }))
+        mode: (0, version_1.parseBumpMode)(core.getInput('mode', { required: true })),
+        considerCode: core.getBooleanInput('consider_code', { required: true })
     };
 }
 exports.getInputs = getInputs;
@@ -89,14 +90,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const pubspec_1 = __nccwpck_require__(3858);
 const action_1 = __nccwpck_require__(9139);
-const update_version_1 = __nccwpck_require__(5140);
+const version_1 = __nccwpck_require__(8217);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        const { mode } = (0, action_1.getInputs)();
+        const { mode, considerCode } = (0, action_1.getInputs)();
         const pubspecContent = (0, pubspec_1.readPubspec)();
         const currentVersion = pubspecContent.version;
         core.info(`current version: ${currentVersion}`);
-        const newVersion = new update_version_1.Version(currentVersion);
+        const newVersion = new version_1.Version(currentVersion, considerCode);
         newVersion.bump(mode);
         const newVersionString = newVersion.toString();
         core.info(`new version: ${newVersionString}`);
@@ -169,24 +170,32 @@ exports.writeUpdatedVersion = writeUpdatedVersion;
 
 /***/ }),
 
-/***/ 5140:
+/***/ 8217:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.parseVersionMode = exports.Version = void 0;
-const versionModes = ['major', 'minor', 'patch'];
+exports.parseBumpMode = exports.Version = void 0;
+const bumpModes = ['major', 'minor', 'patch'];
 class Version {
-    constructor(version) {
+    constructor(value, considerCode) {
+        const [version, code] = value.split('+');
         const splittedVersion = version.split('.').map(part => parseInt(part));
-        if (splittedVersion.length !== 3) {
+        if (splittedVersion.length !== 3 || splittedVersion.some(Number.isNaN)) {
             throw new Error('Invalid version format');
         }
         const [major, minor, patch] = splittedVersion;
         this.major = major;
         this.minor = minor;
         this.patch = patch;
+        if (considerCode) {
+            const parsedCode = code === undefined ? 0 : parseInt(code);
+            if (Number.isNaN(parsedCode)) {
+                throw new Error('Invalid code format');
+            }
+            this.code = parsedCode;
+        }
     }
     bump(versionParam) {
         switch (versionParam) {
@@ -203,19 +212,23 @@ class Version {
                 this.patch += 1;
                 break;
         }
+        if (this.code !== undefined) {
+            this.code += 1;
+        }
     }
     toString() {
-        return `${this.major}.${this.minor}.${this.patch}`;
+        const version = `${this.major}.${this.minor}.${this.patch}`;
+        return this.code === undefined ? version : `${version}+${this.code}`;
     }
 }
 exports.Version = Version;
-function parseVersionMode(value) {
-    if (versionModes.includes(value)) {
+function parseBumpMode(value) {
+    if (bumpModes.includes(value)) {
         return value;
     }
-    throw new Error('That is not a sheep name.');
+    throw new Error('That is not a BumpMode.');
 }
-exports.parseVersionMode = parseVersionMode;
+exports.parseBumpMode = parseBumpMode;
 
 
 /***/ }),

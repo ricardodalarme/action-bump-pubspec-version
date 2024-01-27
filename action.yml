@@ -1,11 +1,14 @@
-name: 'Bump the version of a pubspec file'
-description: 'Bump the version of a pubspec file and create a commit with the changes'
+name: 'Pubspec version bumper'
+description: 'Bump the version of a pubspec file'
 author: 'Ricardo Dalarme'
 
 inputs:
   mode:
     description: 'major|minor|patch'
     required: true
+  consider_code:
+    description: 'Consider the code as a version'
+    default: 'false'
 
 outputs:
   new_version:
